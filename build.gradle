@@ -1,0 +1,73 @@
+plugins {
+    id 'java'
+}
+
+group 'br.com.project'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven { url "https://dl.bintray.com/epam/reportportal" }
+}
+
+ext {
+    cucumberVersion = '5.7.0'
+    reportportalVersion = '5.0.3'
+    restassuredVersion = '4.2.0'
+}
+
+dependencies {
+    implementation 'org.apache.logging.log4j:log4j-core:2.14.1'
+    implementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
+    implementation 'io.github.bonigarcia:webdrivermanager:4.4.3'
+    implementation "io.rest-assured:rest-assured:$restassuredVersion"
+    implementation "io.rest-assured:json-path:$restassuredVersion"
+    implementation "io.rest-assured:xml-path:$restassuredVersion"
+    implementation "io.rest-assured:rest-assured-common:$restassuredVersion"
+    implementation 'com.vaadin.external.google:android-json:0.0.20131108.vaadin1'
+    implementation 'commons-logging:commons-logging:1.2'
+    implementation "org.junit.jupiter:junit-jupiter-api:$cucumberVersion"
+
+    implementation "io.cucumber:cucumber-junit:$cucumberVersion"
+    implementation "io.cucumber:cucumber-java:$cucumberVersion"
+    implementation "io.cucumber:cucumber-picocontainer:$cucumberVersion"
+    implementation "io.cucumber:cucumber-core:$cucumberVersion"
+
+    implementation 'org.slf4j:slf4j-simple:1.7.30'
+    implementation "com.epam.reportportal:agent-java-cucumber5:$reportportalVersion"
+    implementation "com.epam.reportportal:logger-java-log4j:$reportportalVersion"
+
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$cucumberVersion"
+}
+
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+test {
+    testLogging.showStandardStreams = true
+    useJUnitPlatform()
+    systemProperty 'junit.jupiter.extensions.autodetection.enabled', true
+    systemProperty "file.encoding", "utf-8"
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+task cucumber() {
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            def tags = getProperty("tags")
+            args = ['--plugin', 'pretty',
+                    '--plugin', 'com.epam.reportportal.cucumber.StepReporter',
+                    '--glue', 'br.com.project.steps', 'src/test/resources/features',
+                    '--tags', tags]
+        }
+    }
+}

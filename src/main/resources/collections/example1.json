@@ -1,0 +1,24 @@
+{
+  "header": {
+    "accept": "*/*",
+    "store-id": "000",
+    "user-id": "000",
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "attendanceId":"string",
+    "channel":"AAA",
+    "message":"string",
+    "messageId":"string",
+    "messageParameters":{
+      "additionalProp1":"string",
+      "additionalProp2":"string",
+      "additionalProp3":"string"
+    },
+    "messageTemplate":"MESSAGE",
+    "messageType":"SIMPLE",
+    "receiverId":"string",
+    "resend":true,
+    "senderName":"string"
+  }
+}

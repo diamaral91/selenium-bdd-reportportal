@@ -1,0 +1,29 @@
+{
+  "token": {
+    "header": {
+      "authorization": "Basic VW9",
+      "content-type": "application/x-www-form-urlencoded",
+      "cookie": "AWSALB=ACKA"
+    },
+    "body": {
+      "grant_type": "password",
+      "username": "automacao",
+      "password": "teste"
+    }
+  },
+  "Documento": {
+    "itemData": {
+      "documentId": "8ad-cfb46",
+      "documentVersion": "0.6",
+      "encryptedPassword": null,
+      "documentType": null,
+      "documentPages": null
+    },
+    "originData": {
+      "origin": "origin",
+      "ipAddress": "ipv4",
+      "browser": "Chrome",
+      "operatingSystem": "Windows@10"
+    }
+  }
+}
