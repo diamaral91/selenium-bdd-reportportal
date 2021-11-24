@@ -35,18 +35,18 @@ public class frontendStep {
     }
 
     @Dado("que ")
-    public void que_atendimento_tenha_sido_criado(final String cpf) {
+    public void que_(final String cpf) {
         this.base.setCpf(cpf);
         new HomePage(this.base.getDriver()).criarAtendimento(cpf);
     }
 
     @Mas("avanço ")
-    public void avanco_dataPrev_sem_consulta(){
+    public void avanco_(){
         new DataPrevPage(this.base.getDriver()).continuarSemConsulta();
     }
 
     @Quando("aceito ")
-    public void aceito_oferta_de_produto(final String produto) {
+    public void aceito_(final String produto) {
         this.base.setProduto(produto);
         final OfertasPage ofertas = new OfertasPage(this.base.getDriver());
         if ("Conta Corrente".equalsIgnoreCase(produto)) {
@@ -58,7 +58,7 @@ public class frontendStep {
     }
 
     @Quando("configuro ")
-    public void configuro_IDConta_e_IDCartao(final String idconta, final String idCartao) {
+    public void configuro_(final String idconta, final String idCartao) {
         final ConfiguracaoProdutoPage configuracaoProduto = new ConfiguracaoProdutoPage(this.base.getDriver());
         if ("Cartão".equalsIgnoreCase(this.base.getProduto())) {
             configuracaoProduto.vincularCartaoCliente(idconta, idCartao);
@@ -69,12 +69,12 @@ public class frontendStep {
     }
 
     @Quando("confiro ")
-    public void confiro_os_produtos_contratados() {
+    public void confiro_() {
         new ResumoContratacaoPage(this.base.getDriver()).continuar();
     }
 
     @Quando("preencho ")
-    public void preencho_os_dados_de_cliente(final String email) {
+    public void preencho_(final String email) {
         this.base.setEmail(email);
         final DadosClientePage dadosCliente = new DadosClientePage(this.base.getDriver()).popupError();
         if (!"Cartao".equalsIgnoreCase(this.base.getProduto()) && !"Ant".equalsIgnoreCase(this.base.getProduto())) {
@@ -87,26 +87,22 @@ public class frontendStep {
     }
 
     @Quando("marco ")
-    public void marco_mensagem_de_texto_para_envio_de_documentos() {
+    public void marco_() {
         new EnvioDocumentosPage(this.base.getDriver()).selecionarMensagemTexto(EnvioDocumentosEnum.MENSAGEM_TEXTO);
         this.base.setCodUrl(new DocumentosDistanciaPage(this.base.getDriver()).reenviarMensagem());
     }
 
     @Quando("completo ")
-    public void completo_checklist() {
-        final CheckListPage checkList = new CheckListPage(this.base.getDriver());
+    public void completo_() {
         checkList.completarCheckList(this.base.getCpf(), this.base.getCodUrl());
 
         Assertions.assertTrue(checkList.checkEtapas());
     }
 
     @Entao("frontend ")
-    public void frontend_do_produto_efetivada(final String status) {
+    public void frontend_do_(final String status) {
         final AprovacaoPage aprovacao = new AprovacaoPage(this.base.getDriver());
         if (!"Cartão ".equals(this.base.getProduto()) && this.base.getEmail().equals("aprova")) {
-            new MesaPages(this.base.getDriver()).efetuarLogin().iniciarTarefa().analisarTarefa(this.base.getCpf());
-            aprovacao.formalizacaoCamunda(this.base.getEmail(), this.base.getCpf(), 0);
-
             this.base.getDriver().get(getValue("urlBase"));
             new HomePage(this.base.getDriver()).buscarAtendimento(this.base.getCpf());
         }
