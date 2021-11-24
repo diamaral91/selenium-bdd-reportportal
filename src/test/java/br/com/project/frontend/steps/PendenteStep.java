@@ -39,8 +39,8 @@ public class PendenteStep {
         this.base = new TestBase();
     }
 
-    @Dado("que frontend do cpf {} com produto {} seja pendenciada")
-    public void que_frontend_seja_pendenciada(final String cpf, final String produto) {
+    @Dado("que ")
+    public void que_frontend_a(final String cpf, final String produto) {
         this.base.setCpf(cpf);
         this.base.setProduto(produto);
 
@@ -48,31 +48,17 @@ public class PendenteStep {
             new MesaPages(this.base.getDriver()).efetuarLogin().iniciarTarefa().analisarTarefa(cpf);
             new AprovacaoPage(this.base.getDriver()).formalizacaoCamunda("pendenciamesa", this.base.getCpf(), 0);
 
-        } else {
-            new LoginPage(this.base.getDriver()).efetuarLogin();
-            new PesquisarPorCpfPage(this.base.getDriver()).pesquisarCpf(cpf, produto);
-
-            final AnaliseFraudeBancoPagadorPage analiseFraudeBancoPagador = new AnaliseFraudeBancoPagadorPage(this.base.getDriver());
-            Assertions.assertEquals(cpf, analiseFraudeBancoPagador.checkCpfDadosPessoa());
-            analiseFraudeBancoPagador.analisarfrontend(BackofficeEnum.PENDENCIAR);
-
-            final PendenciarPage pendenciar = new PendenciarPage(this.base.getDriver());
-            pendenciar.selecionarMotivoOuAtributoOpcional(BackofficeEnum.DOC_IDENT_NAO_ENV)
-                    .selecionarMotivoOuAtributoOpcional(BackofficeEnum.DADOS_PESSOAIS)
-                    .selecionarMotivoOuAtributoOpcional(BackofficeEnum.NOME_MAE)
-                    .selecionarMotivoOuAtributoOpcional(BackofficeEnum.DATA_NASCIMENTO);
-            pendenciar.pendenciarfrontend();
         }
     }
 
-    @Quando("busco atendimento existente na sales emulator")
-    public void busco_atendimento_existente_na_sales_emulator() {
+    @Quando("busco ")
+    public void busco_atendimento_() {
         this.base.getDriver().get(getValue("urlBase"));
         new HomePage(this.base.getDriver()).buscarAtendimento(this.base.getCpf());
     }
 
-    @Quando("identifico que existem pendencias para resolver")
-    public void identifico_que_existem_pendencias_para_resolver() {
+    @Quando("identifico ")
+    public void identifico_() {
         final List<String> pendencias = new ArrayList<>(Arrays.asList("Reenviar documento de Identificação",
                 "Preenchimento de Dados Complementares"));
 
@@ -83,31 +69,31 @@ public class PendenteStep {
         propostaPendente.resolverProblemas();
     }
 
-    @Quando("preencho os dados pessoais corretamente")
-    public void preencho_os_dados_pessoais_corretamente() {
+    @Quando("preencho ")
+    public void preencho_os_() {
         new DadosClientePage(this.base.getDriver()).preencherDadosPessoaisPendentes();
     }
 
-    @Quando("confiro o resumo da contratação")
-    public void confiro_os_produtos_contratados() {
+    @Quando("confiro")
+    public void confiro_os_() {
         new ResumoContratacaoPage(this.base.getDriver()).continuar();
     }
 
-    @Quando("escolho método de cadastro de documentos")
-    public void escolho_metodo_de_cadastro_de_documentos() {
+    @Quando("escolho")
+    public void escolho_() {
         new EnvioDocumentosPage(this.base.getDriver()).selecionarMensagemTexto(EnvioDocumentosEnum.MENSAGEM_TEXTO);
         this.base.setCodUrl(new DocumentosDistanciaPage(this.base.getDriver()).reenviarMensagem());
     }
 
-    @Quando("realizo checklist do documento novamente")
-    public void realizo_checklist_do_documento_novamente() {
+    @Quando("realizo")
+    public void realizo_() {
         final CheckListPage checkList = new CheckListPage(this.base.getDriver());
         checkList.completarCheckList(this.base.getCpf(), this.base.getCodUrl());
         Assertions.assertTrue(checkList.checkEtapas());
     }
 
-    @Mas("aprovo na mesa caso diferente de Cartão")
-    public void se_produto_for_diferente_de_cartao_beneficio() {
+    @Mas("aprovo")
+    public void se_produto_() {
         if ("Cartão".equalsIgnoreCase(this.base.getProduto())) {
             new LoginPage(this.base.getDriver()).efetuarLogin();
             new PesquisarPorCpfPage(this.base.getDriver()).pesquisarCpf(this.base.getCpf(), this.base.getProduto());
@@ -122,7 +108,7 @@ public class PendenteStep {
     }
 
     @Entao("frontend pendenciada retorna status efetivado")
-    public void frontend_retorna_para_analise_de_fraude() {
+    public void frontend_retorna() {
         final String status = "Efetivado";
 
         final AprovacaoPage aprovacao = new AprovacaoPage(this.base.getDriver());
